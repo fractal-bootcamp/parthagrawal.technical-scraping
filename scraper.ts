@@ -1,17 +1,18 @@
 import * as cheerio from 'cheerio';
+import { promises as fs } from 'fs'
+import path from 'path';
+
 /**
  * Implement a function that takes a URL as input and fetches the HTML content from that URL.
  * Log the size of the fetched HTML content in kilobytes.
  * @param url string
- * @returns html content, and size in kilobytes
+ * @returns html content
  *  
  */
 export const fetchHtml = async (url: string) => {
     const response = await fetch(url);
     const html = await response.text()
 
-
-    writeLog("size of fetched html: " + await html.length)
     return { html }
 
 }
@@ -25,19 +26,51 @@ export const fetchHtml = async (url: string) => {
  * Elements with the class .infobox
  * Ensure all stylesheet links (link rel="stylesheet") are filtered out
  * Filter 
+ * @param html - HTML as a string
+ * @param tag - string to be removed 
+ * @returns modified HTML
  * 
  */
-export const removeTag = () => {
+export const removeTag = (html: string, tag: string): string => {
+    const $ = cheerio.load(html)
+    $(tag).remove();
+    return $.html()
 
 }
+
+/**
+ * Finds a tag
+ * @param html - string of html
+ * @param tag  - string tag to be found 
+ * @returns 
+ */
+
+export const findTag = (html: string, tag: string) => {
+    const $ = cheerio.load(html)
+    const found = $('body').find(tag)
+    return found
+
+}
+
 
 /**
  * Save Processed HTML:
  * Save the cleaned HTML content to a file in an output directory.
  * Ensure the output directory exists; create it if it does not.
+ * @param html - string
+ * @param description
+ * @returns file path
 
  */
-export const saveHtml = () => {
+export const saveHtml = async (html: string, description: string): Promise<string> => {
+    const outputDir = './output';
+    const fileName = `processed_${description}.html`;
+    const filePath = path.join(outputDir, fileName);
+
+    await fs.mkdir(outputDir, { recursive: true });
+    await fs.writeFile(filePath, html, 'utf-8');
+
+    return filePath
 
 }
 
@@ -120,8 +153,22 @@ export const scraper = async (
 ) => {
 
     const fetched = await fetchHtml(seedUrl)
-    writeLog(fetched.html)
+    writeLog("html: " + fetched.html)
+    writeLog("size of fetched html: " + await fetched.html.length)
 
+
+    writeLog('html saved to' + saveHtml(fetched.html, "fetched_HTML"))
+
+    // const found = findTag(fetched.html, 'script')
+    // writeLog("found before clean" + found)
+
+    const cleanedHtml = removeTag(fetched.html, 'h2')
+    writeLog('cleaned HTML: ' + cleanedHtml)
+
+    // const foundCleaned = findTag(fetched.html, 'script')
+    // writeLog("found after clean" + found)
+
+    writeLog('cleaned html saved to' + await saveHtml(cleanedHtml, "cleaned_HTML"))
 
 
 
