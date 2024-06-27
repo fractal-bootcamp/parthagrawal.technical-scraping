@@ -17,6 +17,22 @@ export const fetchHtml = async (url: string) => {
 
 }
 
+
+type RemoveTargets = {
+    tags: string[],
+    classes: string[],
+    ids: string[],
+    tagsWithAttributes: [
+        {
+            tag: string,
+            attribute: {
+                key: string,
+                value: string
+            }
+        }
+    ]
+
+}
 /**
  * Enables functionality to clean up the HTML by removing certain elements such as:
  * script tags
@@ -27,13 +43,39 @@ export const fetchHtml = async (url: string) => {
  * Ensure all stylesheet links (link rel="stylesheet") are filtered out
  * Filter 
  * @param html - HTML as a string
- * @param tag - string to be removed 
+ * @param tags - string[] of tags to be removed 
+ * @param classes
+ * @param ids
+ * @param tagsWithAttributes
  * @returns modified HTML
  * 
  */
-export const removeTag = (html: string, tag: string): string => {
+export const removeTag = (html: string, { tags, classes, ids, tagsWithAttributes }: RemoveTargets): string => {
     const $ = cheerio.load(html)
-    $(tag).remove();
+
+    // tags
+    tags.forEach((tag) => {
+        $(tag).remove();
+    })
+
+    // classes
+    classes.forEach((classElem) => {
+        $(`[class="${classElem}"]`).removeClass(classElem)
+    })
+
+    //ids
+    ids.forEach((idElem) => {
+        $(`[id = "${idElem}"]`)
+    })
+
+    //tags with attributes
+    tagsWithAttributes.forEach((elem) => {
+        $(`${elem.tag}[${elem.attribute.key}="${elem.attribute.value}"]`).remove()
+    })
+
+
+
+
     return $.html()
 
 }
@@ -77,11 +119,14 @@ export const saveHtml = async (html: string, description: string): Promise<strin
 /**
  * Extract Links:
  * Limit the number of extracted links per page to a configurable number (e.g., 10).
- * @param urls - string[] of url
- * What should the input be here?  
+ * @param url - string of url
  */
 
-export const extractLinks = () => {
+export const extractLinks = (html: string,) => {
+    const $ = cheerio.load(html)
+    // const $links = 
+
+
 
 }
 
@@ -161,20 +206,48 @@ export const scraper = async (
 
 
 
-    const cleanh2 = removeTag(fetched.html, 'h2')
-    writeLog('cleaned HTML: ' + cleanh2)
-    writeLog('cleaned html saved to' + await saveHtml(cleanh2, "cleaned_h2"))
+    // // const cleanh2 = removeTag(fetched.html, 'h2')
+    // writeLog('cleaned HTML: ' + cleanh2)
+    // writeLog('cleaned html saved to' + await saveHtml(cleanh2, "cleaned_h2"))
 
 
-    const cleanScripts = removeTag(fetched.html, 'script')
+    const cleanScripts = removeTag(fetched.html, blackListElems)
     writeLog('cleaned HTML: ' + cleanScripts)
-    writeLog('cleaned html saved to' + await saveHtml(cleanScripts, "cleaned_scripts"))
+    writeLog('cleaned html saved to' + await saveHtml(cleanScripts, "cleaned_tags"))
 
 
 
 
 
 }
+
+const blackListElems: RemoveTargets = {
+    tags: [
+        "script",
+        "nav",
+    ],
+    classes: [
+        "vector-header",
+        "infobox"
+
+    ],
+    ids: [
+        "#p-lang-btn",
+    ],
+    tagsWithAttributes: [
+        {
+            tag: "link",
+            attribute: {
+                key: 'rel',
+                value: 'stylesheet'
+            }
+
+        }
+
+    ]
+
+}
+
 
 
 
