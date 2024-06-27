@@ -1,6 +1,7 @@
 import * as cheerio from 'cheerio';
 import { promises as fs } from 'fs'
 import path from 'path';
+import { extractLinks } from './func/extractLinks';
 
 /**
  * Implement a function that takes a URL as input and fetches the HTML content from that URL.
@@ -116,19 +117,6 @@ export const saveHtml = async (html: string, description: string): Promise<strin
 
 }
 
-/**
- * Extract Links:
- * Limit the number of extracted links per page to a configurable number (e.g., 10).
- * @param url - string of url
- */
-
-export const extractLinks = (html: string,) => {
-    const $ = cheerio.load(html)
-    // const $links = 
-
-
-
-}
 
 /**
  * Traversal Depth:
@@ -211,9 +199,12 @@ export const scraper = async (
     // writeLog('cleaned html saved to' + await saveHtml(cleanh2, "cleaned_h2"))
 
 
-    const cleanScripts = removeTag(fetched.html, blackListElems)
-    writeLog('cleaned HTML: ' + cleanScripts)
-    writeLog('cleaned html saved to' + await saveHtml(cleanScripts, "cleaned_tags"))
+    const cleanedHtml = removeTag(fetched.html, blackListElems)
+    writeLog('cleaned HTML: ' + cleanedHtml)
+    writeLog('cleaned html saved to' + await saveHtml(cleanedHtml, "cleaned_tags"))
+
+    extractLinks(cleanedHtml, 10)
+
 
 
 
