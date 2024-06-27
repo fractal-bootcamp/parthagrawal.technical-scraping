@@ -11,10 +11,17 @@ import { extractLinks } from './func/extractLinks';
  *  
  */
 export const fetchHtml = async (url: string) => {
-    const response = await fetch(url);
-    const html = await response.text()
+    try {
 
-    return { html }
+        const response = await fetch(url);
+        const html = await response.text()
+
+        return html
+    }
+    catch (error) {
+        debugger;
+        return ""
+    }
 
 }
 
@@ -186,20 +193,20 @@ export const scraper = async (
 ) => {
 
     const fetched = await fetchHtml(seedUrl)
-    writeLog("html: " + fetched.html)
-    writeLog("size of fetched html: " + await fetched.html.length)
+    writeLog("html: " + fetched)
+    writeLog("size of fetched html: " + await fetched.length)
 
 
-    writeLog('html saved to' + saveHtml(fetched.html, "fetched_HTML"))
+    writeLog('html saved to' + saveHtml(fetched, "fetched_HTML"))
 
 
 
-    // // const cleanh2 = removeTag(fetched.html, 'h2')
+    // // const cleanh2 = removeTag(fetched, 'h2')
     // writeLog('cleaned HTML: ' + cleanh2)
     // writeLog('cleaned html saved to' + await saveHtml(cleanh2, "cleaned_h2"))
 
 
-    const cleanedHtml = removeTag(fetched.html, blackListElems)
+    const cleanedHtml = removeTag(fetched, blackListElems)
     writeLog('cleaned HTML: ' + cleanedHtml)
     writeLog('cleaned html saved to' + await saveHtml(cleanedHtml, "cleaned_tags"))
 
@@ -209,10 +216,29 @@ export const scraper = async (
 
 
 
+}
+
+export const scrapeLink = async (link: string, depthCounter: number) => {
+    debugger;
 
 
+    const fetched = await fetchHtml(link)
+    writeLog('fetched page ' + link)
+    const cleanedHtml = await removeTag(fetched, blackListElems)
+    writeLog('cleaned page ' + link)
+    saveHtml(cleanedHtml, `${link.match(/\/\/(.*?)\.com/)?.[1] ?? ''}`)
+    writeLog('saved page ' + link)
 
+    const linkArr = await extractLinks(cleanedHtml, 10)
+    linkArr.forEach((link) => {
 
+        if (depthCounter > 0) return scrapeLink(link, depthCounter--)
+
+    })
+
+    writeLog('completed layer #' + depthCounter)
+
+    return
 }
 
 const blackListElems: RemoveTargets = {
