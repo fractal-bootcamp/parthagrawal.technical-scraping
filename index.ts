@@ -10,4 +10,4 @@ import { fetchHtml, scrapeLink, scraper } from './scraper'
 
 // scraper("http://localhost:3000", 10, 10, 10, 10)
 
-scrapeLink("http://localhost:3000", 10)
+scrapeLink("http://localhost:3000", 1)
