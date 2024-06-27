@@ -4,87 +4,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Scraper Test Page</title>
+    <title>Sample Webpage with Links</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
+            margin: 0;
             padding: 20px;
+            background-color: #f4f4f4;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .highlight {
-            background-color: yellow;
+        h1 {
+            color: #333;
+        }
+
+        .link-section {
+            margin-bottom: 20px;
+        }
+
+        .link-section h2 {
+            color: #444;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <header>
-            <h1>Welcome to the Scraper Test Page</h1>
-            <nav>
-                <ul>
-                    <li><a href="#section1">Section 1</a></li>
-                    <li><a href="#section2">Section 2</a></li>
-                    <li><a href="#section3">Section 3</a></li>
-                </ul>
-            </nav>
-        </header>
+        <h1>Welcome to Our Link Directory</h1>
 
-        <main>
-            <section id="section1">
-                <h2>Section 1: Text Content</h2>
-                <p>This is a paragraph with some <span class="highlight">highlighted text</span>.</p>
-                <p>Here's a list of items:</p>
-                <ul>
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                </ul>
-            </section>
+        <div class="link-section">
+            <h2>Technology News</h2>
+            <ul>
+                <li><a href="https://www.theverge.com/">The Verge</a></li>
+                <li><a href="https://techcrunch.com/">TechCrunch</a></li>
+                <li><a href="https://www.wired.com/">Wired</a></li>
+            </ul>
+        </div>
 
-            <section id="section2">
-                <h2>Section 2: Image and Link</h2>
-                <img src="/api/placeholder/300/200" alt="Placeholder Image">
-                <p>Check out this <a href="https://www.example.com">example link</a>.</p>
-            </section>
+        <div class="link-section">
+            <h2>Learning Resources</h2>
+            <ul>
+                <li><a href="https://www.coursera.org/">Coursera</a></li>
+                <li><a href="https://www.edx.org/">edX</a></li>
+                <li><a href="https://www.udemy.com/">Udemy</a></li>
+                <li><a href="https://www.khanacademy.org/">Khan Academy</a></li>
+            </ul>
+        </div>
 
-            <section id="section3">
-                <h2>Section 3: Table</h2>
-                <table border="1">
-                    <tr>
-                        <th>Header 1</th>
-                        <th>Header 2</th>
-                    </tr>
-                    <tr>
-                        <td>Row 1, Cell 1</td>
-                        <td>Row 1, Cell 2</td>
-                    </tr>
-                    <tr>
-                        <td>Row 2, Cell 1</td>
-                        <td>Row 2, Cell 2</td>
-                    </tr>
-                </table>
-            </section>
-        </main>
+        <div class="link-section">
+            <h2>Coding Platforms</h2>
+            <ul>
+                <li><a href="https://github.com/">GitHub</a></li>
+                <li><a href="https://stackoverflow.com/">Stack Overflow</a></li>
+                <li><a href="https://www.codecademy.com/">Codecademy</a></li>
+            </ul>
+        </div>
 
-        <footer>
-            <p>&copy; 2024 Scraper Test Page</p>
-        </footer>
+        <div class="link-section">
+            <h2>Entertainment</h2>
+            <ul>
+                <li><a href="https://www.netflix.com/">Netflix</a></li>
+                <li><a href="https://www.spotify.com/">Spotify</a></li>
+                <li><a href="https://www.youtube.com/">YouTube</a></li>
+            </ul>
+        </div>
+
+        <div class="link-section">
+            <h2>Productivity Tools</h2>
+            <ul>
+                <li><a href="https://trello.com/">Trello</a></li>
+                <li><a href="https://evernote.com/">Evernote</a></li>
+                <li><a href="https://www.notion.so/">Notion</a></li>
+            </ul>
+        </div>
     </div>
-
-    <script>
-        console.log("This is a simple inline script");
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log("DOM fully loaded and parsed");
-        });
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </body>
 
 </html>
