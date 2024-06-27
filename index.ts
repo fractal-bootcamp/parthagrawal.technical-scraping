@@ -1,8 +1,11 @@
 
 
 import * as cheerio from 'cheerio'
-const $ = cheerio.load('<div>Hello world </div>');
+import { fetchHtml, scraper } from './scraper'
 
-console.log($)
-$('div.')
 
+
+
+// fetchHtml("https://www.google.com").then(response => { console.log(response) })
+
+scraper("https://google.com", 10, 10, 10, 10)
