@@ -8,4 +8,4 @@ import { fetchHtml, scraper } from './scraper'
 
 // fetchHtml("https://www.google.com").then(response => { console.log(response) })
 
-scraper("https://google.com", 10, 10, 10, 10)
+scraper("http://localhost:3000", 10, 10, 10, 10)
