@@ -1,4 +1,4 @@
-
+import * as cheerio from 'cheerio';
 /**
  * Implement a function that takes a URL as input and fetches the HTML content from that URL.
  * Log the size of the fetched HTML content in kilobytes.
@@ -6,7 +6,13 @@
  * @returns html content, and size in kilobytes
  *  
  */
-export const fetchHtml = () => {
+export const fetchHtml = async (url: string) => {
+    const response = await fetch(url);
+    const html = await response.text()
+
+
+    writeLog("size of fetched html: " + await html.length)
+    return { html }
 
 }
 
@@ -75,7 +81,8 @@ export const traverseLinks = () => {
  * 
  */
 
-export const writeLog = () => {
+export const writeLog = (input: string) => {
+    console.log(input)
 
 }
 
@@ -91,6 +98,33 @@ export const writeLog = () => {
  */
 
 export const parseCmdInput = () => {
+
+}
+
+
+/**
+ * The main function - it'll recursively call itself and all of the other functions
+ * @param seedUrl 
+ * @param maxDepth 
+ * @param maxBreadth 
+ * @param depthCounter - this will get smaller and smaller
+ * @param breadthCounter - this will get smaller and smaller
+ */
+export const scraper = async (
+    seedUrl: string,
+    maxDepth: number,
+    maxBreadth: number = 10,
+    depthCounter: number,
+    breadthCounter: number
+
+) => {
+
+    const fetched = await fetchHtml(seedUrl)
+    writeLog(fetched.html)
+
+
+
+
 
 }
 
