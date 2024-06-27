@@ -211,6 +211,27 @@ export const scraper = async (
 
 }
 
+export const scrapeLink = async (link: string, depthCounter: number) => {
+    debugger;
+
+    if (depthCounter > 0) {
+
+        const fetched = await fetchHtml(link)
+        writeLog('fetched page ' + link)
+        const cleanedHtml = await removeTag(fetched.html, blackListElems)
+        writeLog('cleaned page ' + link)
+        saveHtml(cleanedHtml, `${link.match(/\/\/(.*?)\.com/)?.[1] ?? ''}`)
+        writeLog('saved page ' + link)
+
+        const linkArr = await extractLinks(cleanedHtml, 10)
+        linkArr.map((link) => {
+            scrapeLink(link, depthCounter--)
+        })
+        writeLog('completed layer #' + depthCounter)
+    }
+    return
+}
+
 const blackListElems: RemoveTargets = {
     tags: [
         "script",
