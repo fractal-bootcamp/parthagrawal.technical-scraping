@@ -159,16 +159,17 @@ export const scraper = async (
 
     writeLog('html saved to' + saveHtml(fetched.html, "fetched_HTML"))
 
-    // const found = findTag(fetched.html, 'script')
-    // writeLog("found before clean" + found)
 
-    const cleanedHtml = removeTag(fetched.html, 'h2')
-    writeLog('cleaned HTML: ' + cleanedHtml)
 
-    // const foundCleaned = findTag(fetched.html, 'script')
-    // writeLog("found after clean" + found)
+    const cleanh2 = removeTag(fetched.html, 'h2')
+    writeLog('cleaned HTML: ' + cleanh2)
+    writeLog('cleaned html saved to' + await saveHtml(cleanh2, "cleaned_h2"))
 
-    writeLog('cleaned html saved to' + await saveHtml(cleanedHtml, "cleaned_HTML"))
+
+    const cleanScripts = removeTag(fetched.html, 'script')
+    writeLog('cleaned HTML: ' + cleanScripts)
+    writeLog('cleaned html saved to' + await saveHtml(cleanScripts, "cleaned_scripts"))
+
 
 
 
