@@ -203,7 +203,10 @@ export const scraper = async (
     writeLog('cleaned HTML: ' + cleanedHtml)
     writeLog('cleaned html saved to' + await saveHtml(cleanedHtml, "cleaned_tags"))
 
-    extractLinks(cleanedHtml, 10)
+    const linkArr = await extractLinks(cleanedHtml, 10)
+    writeLog('links extracted: ' + linkArr)
+
+
 
 
 
