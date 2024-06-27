@@ -209,10 +209,6 @@ export const scraper = async (
 
 
 
-
-
-
-
 }
 
 const blackListElems: RemoveTargets = {
