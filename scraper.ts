@@ -10,8 +10,6 @@ export const fetchHtml = async (url: string) => {
     const response = await fetch(url);
     const html = await response.text()
 
-
-    writeLog("size of fetched html: " + await html.length)
     return { html }
 
 }
@@ -120,7 +118,9 @@ export const scraper = async (
 ) => {
 
     const fetched = await fetchHtml(seedUrl)
-    writeLog(fetched.html)
+    writeLog("html" + fetched.html)
+    writeLog("size of fetched html: " + await fetched.html.length)
+
 
 
 
