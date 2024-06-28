@@ -1,7 +1,7 @@
 
 
 import * as cheerio from 'cheerio'
-import { fetchHtml, scrapeLink, scraper } from './scraper'
+import { fetchHtml, scrapeLink } from './scraper'
 
 
 
@@ -10,4 +10,4 @@ import { fetchHtml, scrapeLink, scraper } from './scraper'
 
 // scraper("http://localhost:3000", 10, 10, 10, 10)
 
-scrapeLink("http://localhost:3000", 1)
+scrapeLink("http://localhost:3000", 5)
