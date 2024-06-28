@@ -186,6 +186,9 @@ export const writeLog = (input: string) => {
 
  */
 
+import process from 'process';
+var args = process.argv
+
 export const parseCmdInput = () => {
 
 }
@@ -233,6 +236,7 @@ export const parseCmdInput = () => {
 
 
 // }
+
 
 export const scrapeLink = async (link: string, depthCounter: number) => {
     if (depthCounter <= 0) {
