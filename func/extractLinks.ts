@@ -11,10 +11,10 @@ export const extractLinks = async (html: string, breadth: number): Promise<strin
 
 
     // ignore links that are # 
-    const links = $('a[href]:not([href="#"])')
+    const links = $('a[href]:not([href*="#"])')
     const linkArr = []
 
-    for (let i = 0; i < breadth; i++) {
+    for (let i = 0; i < breadth && i < links.length; i++) {
         linkArr.push((links.get(i).attribs.href))
     }
 

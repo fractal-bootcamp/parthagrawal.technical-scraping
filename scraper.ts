@@ -11,10 +11,17 @@ import { extractLinks } from './func/extractLinks';
  *  
  */
 export const fetchHtml = async (url: string) => {
-    const response = await fetch(url);
-    const html = await response.text()
+    try {
 
-    return { html }
+        const response = await fetch(url);
+        const html = await response.text()
+
+        return html
+    }
+    catch (error) {
+        debugger;
+        return ""
+    }
 
 }
 
@@ -105,17 +112,33 @@ export const findTag = (html: string, tag: string) => {
  * @returns file path
 
  */
+
+import crypto from 'crypto';
+
 export const saveHtml = async (html: string, description: string): Promise<string> => {
     const outputDir = './output';
-    const fileName = `processed_${description}.html`;
+
+    // Sanitize the description: remove slashes and other problematic characters
+    const sanitizedDescription = description.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+
+    // Generate a timestamp
+    const timestamp = Date.now();
+
+    // Generate a short hash to ensure uniqueness
+    const hash = crypto.createHash('md5').update(html).digest('hex').substring(0, 6);
+
+    const fileName = `${timestamp}_${sanitizedDescription}_${hash}.html`;
     const filePath = path.join(outputDir, fileName);
 
+    // Ensure the output directory exists
     await fs.mkdir(outputDir, { recursive: true });
+
+    // Write the file
     await fs.writeFile(filePath, html, 'utf-8');
 
-    return filePath
-
+    return filePath;
 }
+
 
 
 /**
@@ -163,6 +186,9 @@ export const writeLog = (input: string) => {
 
  */
 
+import process from 'process';
+var args = process.argv
+
 export const parseCmdInput = () => {
 
 }
@@ -176,43 +202,69 @@ export const parseCmdInput = () => {
  * @param depthCounter - this will get smaller and smaller
  * @param breadthCounter - this will get smaller and smaller
  */
-export const scraper = async (
-    seedUrl: string,
-    maxDepth: number,
-    maxBreadth: number = 10,
-    depthCounter: number,
-    breadthCounter: number
+// export const scraper = async (
+//     seedUrl: string,
+//     maxDepth: number,
+//     maxBreadth: number = 10,
+//     depthCounter: number,
+//     breadthCounter: number
 
-) => {
+// ) => {
 
-    const fetched = await fetchHtml(seedUrl)
-    writeLog("html: " + fetched.html)
-    writeLog("size of fetched html: " + await fetched.html.length)
-
-
-    writeLog('html saved to' + saveHtml(fetched.html, "fetched_HTML"))
+//     const fetched = await fetchHtml(seedUrl)
+//     writeLog("html: " + fetched)
+//     writeLog("size of fetched html: " + await fetched.length)
 
 
-
-    // // const cleanh2 = removeTag(fetched.html, 'h2')
-    // writeLog('cleaned HTML: ' + cleanh2)
-    // writeLog('cleaned html saved to' + await saveHtml(cleanh2, "cleaned_h2"))
+//     writeLog('html saved to' + saveHtml(fetched, "fetched_HTML"))
 
 
-    const cleanedHtml = removeTag(fetched.html, blackListElems)
-    writeLog('cleaned HTML: ' + cleanedHtml)
-    writeLog('cleaned html saved to' + await saveHtml(cleanedHtml, "cleaned_tags"))
+
+//     // // const cleanh2 = removeTag(fetched, 'h2')
+//     // writeLog('cleaned HTML: ' + cleanh2)
+//     // writeLog('cleaned html saved to' + await saveHtml(cleanh2, "cleaned_h2"))
+
+
+//     const cleanedHtml = removeTag(fetched, blackListElems)
+//     writeLog('cleaned HTML: ' + cleanedHtml)
+//     writeLog('cleaned html saved to' + await saveHtml(cleanedHtml, "cleaned_tags"))
+
+//     const linkArr = await extractLinks(cleanedHtml, 10)
+//     writeLog('links extracted: ' + linkArr)
+
+
+
+
+// }
+
+
+export const scrapeLink = async (link: string, depthCounter: number) => {
+    if (depthCounter <= 0) {
+        return;
+    }
+
+    const fetched = await fetchHtml(link)
+    writeLog('fetched page ' + link)
+    const cleanedHtml = await removeTag(fetched, blackListElems)
+    writeLog('cleaned page ' + link)
+    debugger;
+    saveHtml(cleanedHtml, `${link.replace(/^.*?:\/\//, '')};
+}`)
+    writeLog('saved page ' + link)
+
 
     const linkArr = await extractLinks(cleanedHtml, 10)
-    writeLog('links extracted: ' + linkArr)
+    linkArr.forEach((link) => {
 
+        depthCounter--;
+        return scrapeLink(link, depthCounter);
+        return;
 
+    })
 
+    writeLog('completed layer #' + depthCounter)
 
-
-
-
-
+    return
 }
 
 const blackListElems: RemoveTargets = {
